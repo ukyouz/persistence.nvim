@@ -7,6 +7,7 @@ local defaults = {
   -- Set to 0 to always save
   need = 1,
   branch = true, -- use git branch to save session
+  path_sep = "%%", -- separator for session file paths
 }
 
 ---@type Persistence.Config

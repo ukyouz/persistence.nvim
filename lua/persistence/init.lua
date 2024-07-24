@@ -10,13 +10,14 @@ local e = vim.fn.fnameescape
 ---@param opts? {branch?: boolean}
 function M.current(opts)
   opts = opts or {}
-  local name = vim.fn.getcwd():gsub("[\\/:]+", "%%")
+  local name = vim.fn.getcwd():gsub("[\\/:]+", Config.options.path_sep)
   if Config.options.branch and opts.branch ~= false then
     local branch = M.branch()
     if branch and branch ~= "main" and branch ~= "master" then
-      name = name .. "%%" .. branch:gsub("[\\/:]+", "%%")
+      name = name .. Config.options.path_sep .. branch:gsub("[\\/:]+", Config.options.path_sep)
     end
   end
+  print(Config.options.dir .. name .. ".vim")
   return Config.options.dir .. name .. ".vim"
 end
 
@@ -110,8 +111,8 @@ function M.select()
   for _, session in ipairs(M.list()) do
     if uv.fs_stat(session) then
       local file = session:sub(#Config.options.dir + 1, -5)
-      local dir, branch = unpack(vim.split(file, "%%", { plain = true }))
-      dir = dir:gsub("%%", "/")
+      local dir, branch = unpack(vim.split(file, Config.options.path_sep, { plain = true }))
+      dir = dir:gsub(Config.options.path_sep, "/")
       if jit.os:find("Windows") then
         dir = dir:gsub("^(%w)/", "%1:/")
       end
