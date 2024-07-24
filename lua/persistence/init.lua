@@ -68,6 +68,7 @@ function M.stop()
 end
 
 function M.save()
+  vim.cmd("doautocmd User PersistenceSavePre")
   vim.cmd("mks! " .. e(M.current()))
 end
 
